@@ -15,6 +15,7 @@ class polynomial(object):
 
     def add(self, other):
         assert(self.m == other.m), "error"
+        assert(self.m == other.m), "error"
         res = []
         print(len(self.pol))
         print(len(other.pol))
@@ -27,6 +28,13 @@ class polynomial(object):
 
     def subtract(self,other):
         assert(self.m == other.m), "error"
+        #We are subtracting the second polynomial from the first polynomial
+        for i in range(self.m):
+            if(self.pol[i] < other.pol[i]):
+                self.pol[i] = 1
+            else:
+                self.pol[i] = self.pol[i] - other.pol[i]
+
 
     def multiplication(self,other):
         assert(self.m == other.m), "error"
