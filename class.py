@@ -77,6 +77,21 @@ class polynomial(object):
     def multiplication(self,other):
         assert(self.m == other.m), "error"
 
+    def degree(self):
+        for i in range(self.m-1,-1,-1):
+            if(self.pol[i] == 1):
+                return i
+
+    def division(self,other):
+        current = polynomial(self.pol)
+        ans = polynomial([0]*self.m)
+        rem = polynomial([0]*self.m)
+        while(current.degree() >= other.degree()):
+            ans.pol[current.degree() - other.degree()] = 1
+            current = current.subtract(other)
+        rem = current
+        return ans, rem
+
     def inverse(self, other):
         assert(self.m == other.m), "error"
 
