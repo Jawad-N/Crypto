@@ -83,12 +83,16 @@ class polynomial(object):
                 return i
 
     def division(self,other):
+        assert(self.m == other.m), "error"
         current = polynomial(self.pol)
         ans = polynomial([0]*self.m)
         rem = polynomial([0]*self.m)
         while(current.degree() >= other.degree()):
             ans.pol[current.degree() - other.degree()] = 1
-            current = current.subtract(other)
+            temp = polynomial([0]*(current.degree()-other.degree()))
+            temp.pol[current.degree() - other.degree()-1] = 1
+            current = current.subtract(mul(other,temp))
+            print(current)
         rem = current
         return ans, rem
 
@@ -106,16 +110,15 @@ class polynomial(object):
         else: return " + ".join(ans)
 
 
-L = [0,0,0,0,1,1]
-L2 = [0,0,0,0,1,1]
+L = [1,0,0,1,1,1,1,0,1,1,0,1,0,1]
+L2 =[1,1,0,1,1,0,0,0,1,0,0,0,0,0]
 poly1 = polynomial(L)
 poly2 = polynomial(L2)
 print(poly1)
 print(poly2)
-poly3 = mul(poly1, poly2)
-print(poly3)
-print(leftShift(L))
-print(rightShift(L))
+poly3 = poly1.division(poly2)
+print(poly3[0])
+print(poly3[1])
 
 
     
