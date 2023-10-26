@@ -2,8 +2,10 @@ import math
 
 #def irreducible(m): # given GF(2^m) we want to return the irreducible polynomial of this field
                     # we can't do it by bruteforce, for big m it is computationally impossible
-    
 
+#we always consider the irreducible polynomial that is m(x) = x^m + x + 1
+#we know it is irreducible because m(0) = 1 and m(1) = 1 thus it has no roots --> it cannot be factorized
+ 
 def leftShift(L):# careful also affects L, this multiplies the polynomial by x
     n = len(L)
     L.append(0)
@@ -29,8 +31,6 @@ def mul(p1,p2):
         res[i] %= 2
     return polynomial(res)
 
-
-
 class polynomial(object):
     def __init__(self, L):
         self.m = len(L)
@@ -41,10 +41,12 @@ class polynomial(object):
             self.pol[i] %= 2
 
     def modulo(self):
-        irred = irred(self.m)
-        len(self.poly)
+        # check the field over which the polynomial is created in self.m
+        # and apply modulo m(x) which is x^m + x + 1
 
-        
+        len(self.pol)
+
+
 
     def add(self, other):
         assert(self.m == other.m), "error"
