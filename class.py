@@ -1,8 +1,17 @@
 import math
+
+def irreducible(m): # given GF(2^m) we want to return the irreducible polynomial of this field
+                    # we can't do it by bruteforce, for big m it is computationally impossible
+    
+
+
 class polynomial(object):
     def __init__(self, L):
         self.m = len(L)
         self.pol = L
+        for i in range(self.m):
+            self.poly[i] %= 2
+        
 
     def add(self, other):
         assert(self.m == other.m), "error"
