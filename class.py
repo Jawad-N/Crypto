@@ -43,7 +43,7 @@ class polynomial(object):
     def modulo(self):
         # check the field over which the polynomial is created in self.m
         # and apply modulo m(x) which is x^m + x + 1
-
+        
         len(self.pol)
 
 
