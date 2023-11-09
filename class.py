@@ -62,7 +62,6 @@ class polynomial(object):
 
 
     def subtract(self,other):
-        assert(self.m == other.m), "error"
         #We are subtracting the second polynomial from the first polynomial
         res = [0]*self.m
         for i in range(self.m):
@@ -85,14 +84,13 @@ class polynomial(object):
                 return i
 
     def division(self,other):
-        assert(self.m == other.m), "error"
         current = polynomial(self.pol)
-        ans = polynomial([0]*self.m)
-        rem = polynomial([0]*self.m)
+        ans = polynomial([0]*len(self.pol))
+        rem = polynomial([0]*other.m)
         while(current.degree() >= other.degree()):
             ans.pol[current.degree() - other.degree()] = 1
-            temp = polynomial([0]*(current.degree()-other.degree()))
-            temp.pol[current.degree() - other.degree()-1] = 1
+            temp = polynomial([0]*(current.degree()-other.degree()+1))
+            temp.pol[-1] = 1
             current = current.subtract(mul(other,temp))
             print(current)
         rem = current
@@ -118,9 +116,9 @@ poly1 = polynomial(L)
 poly2 = polynomial(L2)
 print(poly1)
 print(poly2)
+print('\n')
 poly3 = poly1.division(poly2)
-print(poly3[0])
-print(poly3[1])
+
 
 
     
