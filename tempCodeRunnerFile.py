@@ -1,1 +1,1 @@
-print
+__mul
