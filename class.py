@@ -19,14 +19,14 @@ class polynomial(object):
         assert(self.m == other.m), "error"
         res = []
 
-        for i in range(self.m+1):
+        for i in range( self.m ):
             res.append( self.pol[i] + other.pol[i] )
             res[-1] %= 2
         return polynomial(res)
     
     def subtract(self,other):
         #We are subtracting the second polynomial from the first polynomial
-        res = [0] * (self.m + 1)
+        res = [0] * ( self.m )
         for i in range( min(other.m, self.m) ):
             if(self.pol[i] < other.pol[i]):
                 res[i] = 1
@@ -287,26 +287,28 @@ operation['values'] = (3, 8, 113, 131, 163, 193, 233, 239, 283, 409, 571)
 operation.pack()
 
 def perform_operation():
+    flag = False
     m = int(selected_m.get())
     poly = poly_input.get()
+    poly = [int(x) for x in poly.replace("x^", "").replace(" ", "").split("+")]    
     poly2 = poly_input2.get()
-    poly = [int(x) for x in poly.replace("x^", "").replace(" ", "").split("+")]
-    poly2 = [int(x) for x in poly2.replace("x^", "").replace(" ", "").split("+")]
-    L1 = [0] * (max(poly) + 1)
-    L2 = [0] * (max(poly2) + 1) 
+    try:
+        poly2 = [int(x) for x in poly2.replace("x^", "").replace(" ", "").split("+")]
+    except Exception as e:
+        flag = True
+    L1 = [0] * m
+    L2 = [0] * m
     for i in poly:
         L1[i] = 1
-    for i in poly2:
-        L2[i] = 1
+    if(not flag):
+        for i in poly2:
+            L2[i] = 1
 
     # reduce somehow
 
     poly = polynomial(L1)
     poly2 = polynomial(L2)
     operation = selected_operation.get() 
-    print(poly)
-    print(poly2)
-
     if operation == 'Addition':
         result = poly.add(poly2)
     elif operation == 'Subtraction':
