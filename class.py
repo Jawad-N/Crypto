@@ -1,7 +1,9 @@
 import math
 from copy import deepcopy
-# Using Optimal irreducible polynomials for Pentium-type 32-bit processor - List in the sent article
+import tkinter as tk
+from tkinter import ttk
 
+# Using Optimal irreducible polynomials for Pentium-type 32-bit processor - List in the sent article
 
 
 class polynomial(object):
@@ -159,20 +161,65 @@ D = {
     571: m571
 }
 
+root = tk.Tk()
 
-L = [ 1, 1, 1, 0, 1, 0, 1, 0, 0 ]
-L2 = [ 1, 1, 0, 0, 0, 0, 0, 1, 0 ]
-
-poly1 = polynomial(L)
-poly2 = polynomial(L2)
-print(poly2.modularInverse())
-
-L3 = [1,0,1,0]
-poly3 = polynomial(L3)  
-print(poly3.modularInverse())
+root.title("Polynomial Operator")
 
 
+label = tk.Label(root, text="First Polynomial: ", font=("Arial", 12))
+label.pack()
+poly_input = tk.StringVar()
+poly_input = tk.Entry(root, textvariable=poly_input, width=70)
+poly_input.pack()
 
+
+label2 = tk.Label(root, text="Second Polynomial: ", font=("Arial", 12))
+label2.pack()
+poly_input2 = tk.StringVar()
+poly_input2 = tk.Entry(root, textvariable=poly_input2, width=70)
+poly_input2.pack()
+
+selected_operation = tk.StringVar()
+selected_operation.set("Select operation")
+operation = ttk.Combobox(root, textvariable=selected_operation, width=50)
+operation['values'] = ('Addition', 'Subtraction', 'Multiplication', 'Division', 'Modular Inverse')
+operation.pack()
+
+def perform_operation():
+    poly = poly_input.get()
+    poly2 = poly_input2.get()
+    poly = polynomial([int(x) for x in poly.split()])
+    poly2 = polynomial([int(x) for x in poly2.split()])
+    operation = selected_operation.get() 
+
+    print(poly)
+    print(poly2)
+
+    if operation == 'Addition':
+        result = poly.add(poly2)
+    elif operation == 'Subtraction':
+        result = poly.subtract(poly2)
+    elif operation == 'Multiplication':
+        result = poly.multiplication(poly2)
+    elif operation == 'Division':
+        result = poly.division(poly2)
+    elif operation == 'Modular Inverse':
+        result = poly.modularInverse()
+    else:
+        result = 'Error'
+    # Display the result in the output field
+    result_text.delete(1.0, tk.END)
+    result_text.insert(tk.END, result)
+
+operation_button = tk.Button(root, text="Perform Operation", command=perform_operation)
+operation_button.pack()
+
+
+result_text = tk.Text(root, height=2, width=50)
+result_text.pack()
+
+
+root.mainloop()
 
 
 
