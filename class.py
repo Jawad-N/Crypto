@@ -255,6 +255,87 @@ print(poly)
 #print( poly1.multiplication(poly1.modularInverse()) )
 
 """
+
+root = tk.Tk()
+
+root.title("Polynomial Operator")
+
+
+label = tk.Label(root, text="First Polynomial: ", font=("Arial", 12))
+label.pack()
+poly_input = tk.StringVar()
+poly_input = tk.Entry(root, textvariable=poly_input, width=70)
+poly_input.pack()
+
+
+label2 = tk.Label(root, text="Second Polynomial: ", font=("Arial", 12))
+label2.pack()
+poly_input2 = tk.StringVar()
+poly_input2 = tk.Entry(root, textvariable=poly_input2, width=70)
+poly_input2.pack()
+
+selected_operation = tk.StringVar()
+selected_operation.set("Select operation")
+operation = ttk.Combobox(root, textvariable=selected_operation, width=50)
+operation['values'] = ('Addition', 'Subtraction', 'Multiplication', 'Division', 'Modular Inverse')
+operation.pack()
+
+selected_m = tk.StringVar()
+selected_m.set("Select m")
+operation = ttk.Combobox(root, textvariable=selected_m, width=50)
+operation['values'] = (3, 8, 113, 131, 163, 193, 233, 239, 283, 409, 571)
+operation.pack()
+
+def perform_operation():
+    m = int(selected_m.get())
+    poly = poly_input.get()
+    poly2 = poly_input2.get()
+    poly = [int(x) for x in poly.replace("x^", "").replace(" ", "").split("+")]
+    poly2 = [int(x) for x in poly2.replace("x^", "").replace(" ", "").split("+")]
+    L1 = [0] * (max(poly) + 1)
+    L2 = [0] * (max(poly2) + 1) 
+    for i in poly:
+        L1[i] = 1
+    for i in poly2:
+        L2[i] = 1
+
+    # reduce somehow
+
+    poly = polynomial(L1)
+    poly2 = polynomial(L2)
+    operation = selected_operation.get() 
+    print(poly)
+    print(poly2)
+
+    if operation == 'Addition':
+        result = poly.add(poly2)
+    elif operation == 'Subtraction':
+        result = poly.subtract(poly2)
+    elif operation == 'Multiplication':
+        result = poly.multiplication(poly2)
+    elif operation == 'Division':
+        result = poly.division(poly2)
+    elif operation == 'Modular Inverse':
+        result = poly.modularInverse()
+    else:
+        result = 'Error'
+    # Display the result in the output field
+    result_text.delete(1.0, tk.END)
+    result_text.insert(tk.END, result)
+
+operation_button = tk.Button(root, text="Perform Operation", command=perform_operation)
+operation_button.pack()
+
+
+result_text = tk.Text(root, height=2, width=50)
+result_text.pack()
+
+
+root.mainloop()
+
+
+
+
 """
 root = tk.Tk()
 
