@@ -225,7 +225,7 @@ print(poly)
 """
 #Example 5
 """
-L1 = [1,1,1,0,0,0,0,0]
+L1 = [1,1,0,0,0,0,0,1]
 L2 = [1,1,0,0,0,0,0,1]
 poly1 = polynomial(L1)
 poly2 = polynomial(L2)
@@ -236,6 +236,7 @@ poly = poly1.multiplication(poly2)
 print(poly2.pol, poly2.m)
 print(poly1.pol, poly1.m)
 poly3 = poly1.modularInverse()
+print(poly1.modularInverse())
 print(poly2.pol, poly2.m)
 print( poly1.pol, poly1.m )
 poly = poly1.multiplication(poly3)
@@ -296,8 +297,8 @@ def perform_operation():
         poly2 = [int(x) for x in poly2.replace("x^", "").replace(" ", "").split("+")]
     except Exception as e:
         flag = True
-    L1 = [0] * m
-    L2 = [0] * m
+    L1 = [0] * max( m, max(poly) + 1 )
+    L2 = [0] * max( m, max(poly2) + 1 )
     for i in poly:
         L1[i] = 1
     if(not flag):
@@ -307,7 +308,14 @@ def perform_operation():
     # reduce somehow
 
     poly = polynomial(L1)
-    poly2 = polynomial(L2)
+    if not flag:
+        poly2 = polynomial(L2)
+        poly2 = poly2.division( D[m] )[1]
+    poly = poly.division( D[m] )[1]
+    
+    poly.m = m
+    if not flag:
+        poly2.m = m
     operation = selected_operation.get() 
     if operation == 'Addition':
         result = poly.add(poly2)
