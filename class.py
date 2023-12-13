@@ -12,7 +12,7 @@ class polynomial(object):
 
 
     def __init__(self, L): 
-        self.m = len(L)-1
+        self.m = len(L) 
         self.pol = deepcopy(L)
         for i in range(len(L)):
             self.pol[i] %= 2
@@ -39,32 +39,32 @@ class polynomial(object):
     def __mul(p1,p2):
         assert( type(p1) == polynomial and type(p2) == polynomial ), "multiplying non polinomial objects"
         res = [0] * (p1.m + p2.m + 1)
-        for i in range(len(p1.pol)):
-            for j in range(len(p2.pol)):
+        for i in range(p1.m):
+            for j in range(p2.m):
                 res[i+j] += p1.pol[i] * p2.pol[j] # can implemented in O(nlogn using FFT) 
+
         for i in range(len(res)):
             res[i] %= 2
+
         return polynomial(res)
 
     def division(self,other):
         current = polynomial( self.pol )
-        ans = polynomial( [0] * (other.m + 1) )
-        rem = polynomial( [0] * (other.m + 1) )
+        ans = polynomial( [0] * (other.m) )
+        rem = polynomial( [0] * (other.m) )
         while( current.degree() >= other.degree() ):
-            ###Inf loop
             ans.pol[ current.degree() - other.degree() ] = 1
             temp = polynomial( [0] * ( current.degree()-other.degree()+1 ) )
             temp.pol[-1] = 1
-            current = current.subtract( other.__mul( temp ) ) # here we use the first multiplication that is not modular cause we need division to stay in the field
+            current = current.subtract( other.__mul( temp ) )
         rem = current
+        rem.m = ans.m
         return ans, rem
     
     def multiplication(self,other):
         curr = self.__mul( other )
-        return curr.division(D[self.m])[1] 
-    # returning the remainder of the division between the polynomial of 
-    # the regular multiplication ignoring the field limits, which is then
-    # moduloed with the field irreducible polynomial
+        return curr.division(D[other.m])[1] 
+
 
     def degree(self):
         for i in range(len(self.pol)-1,-1,-1):
@@ -73,23 +73,23 @@ class polynomial(object):
         return -1
 
     def modularInverse(self):
-        mod = D[self.m]
-        print("here: ",self.m)
-        zero = [0] * ( self.m+1 )
-        one = [0] * ( self.m+1 )
+        mod = deepcopy( D[self.m] )
+        mod.m -= 1
+        zero = [0] * ( self.m )
+        one = [0] * ( self.m )
         one[0] = 1
         A = [polynomial(one), polynomial(zero), mod]
         B = [polynomial(zero), polynomial(one), self]
-        print(mod)
-        print("here")
-        print(self)
         one = polynomial(one)
         while( not (B[2] == one) ):
+         
             (Q, R) = A[2].division(B[2])
             C = [0, 0, 0]
             C[0] = A[0].subtract( Q.multiplication(B[0]) )
+
             C[1] = A[1].subtract( Q.multiplication(B[1]) )
             C[2] = R
+            C[0].m = C[1].m = C[2].m = B[2].m
             A = B
             B = C
         return B[1]
@@ -147,6 +147,7 @@ m283 = polynomial(m283)
 m409 = polynomial(m409)
 m571 = polynomial(m571)
 
+
 D = {
     3 : m3    ,
     8 : m8    ,
@@ -160,7 +161,103 @@ D = {
     409: m409 ,
     571: m571
 }
+"""
+####Example1
+L1 = [1,1,1,0,1,0,1,0]
+L2 = [1,1,0,0,0,0,0,1]
+poly1 = polynomial(L1)
+poly2 = polynomial(L2)
+print(poly1)
+print(poly2)
+poly = poly1.multiplication(poly2)
+print(poly)
+"""
+"""
+####Example2
+print('\n')
+print('\n')
 
+
+
+
+L1 = [1,1,1,0,0,0,0,0]
+L2 = [1,1,0,0,0,0,0,1]
+poly1 = polynomial(L1)
+poly2 = polynomial(L2)
+print(poly1)
+print(poly2)
+poly = poly2.division(poly1)[0]
+print(poly, poly.m)
+"""
+"""
+####Example3
+print('\n')
+print('\n')
+
+L1 = [1,1,1,0,0,0,0,0]
+L2 = [1,1,0,0,0,0,0,1]
+poly1 = polynomial(L1)
+poly2 = polynomial(L2)
+print(poly1)
+print(poly2)
+print('\n')
+poly = poly2.modularInverse()
+print(poly)
+#print(poly1.multiplication(poly2))
+#print( poly1.multiplication(poly1.modularInverse()) )
+
+"""
+"""
+####Example4
+print('\n')
+print('\n')
+
+L1 = [1,1,1,0,0,0,0,0]
+L2 = [1,1,0,0,0,0,0,1]
+poly1 = polynomial(L1)
+poly2 = polynomial(L2)
+print(poly1)
+print(poly2)
+print('\n')
+poly = poly1.multiplication(poly2)
+print(poly)
+#print(poly1.multiplication(poly2))
+#print( poly1.multiplication(poly1.modularInverse()) )
+
+"""
+#Example 5
+"""
+L1 = [1,1,1,0,0,0,0,0]
+L2 = [1,1,0,0,0,0,0,1]
+poly1 = polynomial(L1)
+poly2 = polynomial(L2)
+print(poly1)
+print(poly2)
+print('\n')
+poly = poly1.multiplication(poly2)
+print(poly2.pol, poly2.m)
+print(poly1.pol, poly1.m)
+poly3 = poly1.modularInverse()
+print(poly2.pol, poly2.m)
+print( poly1.pol, poly1.m )
+poly = poly1.multiplication(poly3)
+print(poly)
+#print("\n")
+#print(poly3, len(poly3.pol), poly1.m)
+#print('\n')
+#poly5 = poly3.pol[:-1]
+
+#poly5 = polynomial(poly5)
+
+#print( poly5, poly5.pol, len( poly5.pol ), poly5.m )
+#print(poly2.multiplication(poly1))
+#poly4 = poly3.multiplication( poly1 )
+#print( poly4 )
+#print(poly1.multiplication(poly2))
+#print( poly1.multiplication(poly1.modularInverse()) )
+
+"""
+"""
 root = tk.Tk()
 
 root.title("Polynomial Operator")
@@ -188,12 +285,13 @@ operation.pack()
 def perform_operation():
     poly = poly_input.get()
     poly2 = poly_input2.get()
+    print(poly)
+    print(poly2)
     poly = polynomial([int(x) for x in poly.split()])
     poly2 = polynomial([int(x) for x in poly2.split()])
     operation = selected_operation.get() 
 
-    print(poly)
-    print(poly2)
+  
 
     if operation == 'Addition':
         result = poly.add(poly2)
@@ -221,5 +319,5 @@ result_text.pack()
 
 root.mainloop()
 
-
+"""
 
