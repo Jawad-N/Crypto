@@ -8,8 +8,6 @@ from tkinter import ttk
 
 class polynomial(object):
 
-    
-
 
     def __init__(self, L): 
         self.m = len(L)-1
@@ -185,13 +183,30 @@ operation = ttk.Combobox(root, textvariable=selected_operation, width=50)
 operation['values'] = ('Addition', 'Subtraction', 'Multiplication', 'Division', 'Modular Inverse')
 operation.pack()
 
+selected_m = tk.StringVar()
+selected_m.set("Select m")
+operation = ttk.Combobox(root, textvariable=selected_m, width=50)
+operation['values'] = (3, 8, 113, 131, 163, 193, 233, 239, 283, 409, 571)
+operation.pack()
+
 def perform_operation():
+    m = int(selected_m.get())
     poly = poly_input.get()
     poly2 = poly_input2.get()
-    poly = polynomial([int(x) for x in poly.split()])
-    poly2 = polynomial([int(x) for x in poly2.split()])
-    operation = selected_operation.get() 
+    poly = [int(x) for x in poly.replace("x^", "").replace(" ", "").split("+")]
+    poly2 = [int(x) for x in poly2.replace("x^", "").replace(" ", "").split("+")]
+    L1 = [0] * (max(poly) + 1)
+    L2 = [0] * (max(poly2) + 1) 
+    for i in poly:
+        L1[i] = 1
+    for i in poly2:
+        L2[i] = 1
 
+    # reduce somehow
+
+    poly = polynomial(L1)
+    poly2 = polynomial(L2)
+    operation = selected_operation.get() 
     print(poly)
     print(poly2)
 
